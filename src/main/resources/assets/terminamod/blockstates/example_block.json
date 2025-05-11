@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "terminamod:block/example_block"
+    }
+  }
+}

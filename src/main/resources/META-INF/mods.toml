@@ -1,0 +1,15 @@
+modLoader="javafml"
+loaderVersion="[48,)"  # Forge pour Minecraft 1.21.4
+license="MIT"
+
+[[mods]]
+modId="terminamod"
+version="1.0.2"
+displayName="TerminaMod"
+authors="TerminaPaul"
+description='Le mod de TerminaPaul'
+
+#nettoie le cache = ./gradlew clean
+#commpiler mod    = ./gradlew build
+#lancer le test   = ./gradlew runClient
+#Les trois = ./gradlew clean build runClient
