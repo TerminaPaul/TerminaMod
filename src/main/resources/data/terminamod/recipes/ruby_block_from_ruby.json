@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "###",
+    "###",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "terminamod:ruby"
+    }
+  },
+  "result": {
+    "item": "terminamod:ruby_block",
+    "count": 1
+  }
+}
