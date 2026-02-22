@@ -3,6 +3,7 @@ package com.terminapaul.terminamod;
 import com.mojang.logging.LogUtils;
 import com.terminapaul.terminamod.worldgen.ModWorldGen;
 import com.terminapaul.terminamod.worldgen.biome.BiomeRegion;
+import com.terminapaul.terminamod.worldgen.biome.ModBiomes;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.common.Mod;
@@ -23,6 +24,7 @@ public class TerminaMod {
         ModItems.register(modEventBus);
         ModCreativeModeTabs.register(modEventBus);
         ModWorldGen.register(modEventBus);
+        ModBiomes.register(modEventBus);
         modEventBus.addListener(this::commonSetup);
         MinecraftForge.EVENT_BUS.register(this);
     }

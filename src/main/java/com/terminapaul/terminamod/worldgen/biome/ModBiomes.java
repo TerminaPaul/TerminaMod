@@ -6,12 +6,20 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.biome.*;
 import net.minecraft.data.worldgen.BiomeDefaultFeatures;
+import net.minecraftforge.registries.DeferredRegister;
+import net.minecraftforge.registries.RegistryObject;
+import net.minecraftforge.eventbus.api.IEventBus;
 
-@SuppressWarnings("'ResourceLocation(java.lang.String, java.lang.String)' is deprecated since version 1.20.6 and marked for removal")
 public class ModBiomes {
-    public static final ResourceKey<Biome> RUBY_HIGHLANDS =
-            ResourceKey.create(Registries.BIOME,
-                    new ResourceLocation(TerminaMod.MOD_ID, "ruby_highlands"));
+    public static final DeferredRegister<Biome> BIOMES =
+            DeferredRegister.create(Registries.BIOME, TerminaMod.MOD_ID);
+
+    public static final RegistryObject<Biome> RUBY_HIGHLANDS =
+            BIOMES.register("ruby_highlands", ModBiomes::rubyHighlands);
+
+    public static void register(IEventBus eventBus) {
+        BIOMES.register(eventBus);
+    }
 
     public static Biome rubyHighlands() {
         MobSpawnSettings.Builder spawnBuilder = new MobSpawnSettings.Builder();
