@@ -19,9 +19,13 @@ public class ModSurfaceRules {
             SurfaceRules.state(Blocks.STONE.defaultBlockState());
     private static final SurfaceRules.RuleSource CALCITE =
             SurfaceRules.state(Blocks.CALCITE.defaultBlockState());
+    private static final SurfaceRules.RuleSource DEEPSLATE =
+            SurfaceRules.state(Blocks.DEEPSLATE.defaultBlockState());
 
     private static final ResourceKey<NormalNoise.NoiseParameters> SURFACE_NOISE =
             ResourceKey.create(Registries.NOISE, new ResourceLocation("minecraft", "surface"));
+    private static final ResourceKey<NormalNoise.NoiseParameters> NOODLE_NOISE =
+            ResourceKey.create(Registries.NOISE, new ResourceLocation("minecraft", "noodle"));
 
     public static SurfaceRules.RuleSource makeRules() {
 
@@ -29,8 +33,24 @@ public class ModSurfaceRules {
                 BiomeRegion.RUBY_HIGHLANDS
         );
 
-        // Patches naturels de calcite via bruit (-0.5 à 0.5 = ~50% calcite, ~50% stone)
-        SurfaceRules.RuleSource steepLayers = SurfaceRules.sequence(
+        // Transition stone/deepslate progressive
+        SurfaceRules.RuleSource stoneOrDeepslate = SurfaceRules.sequence(
+                SurfaceRules.ifTrue(
+                        SurfaceRules.not(SurfaceRules.yBlockCheck(VerticalAnchor.absolute(-8), 0)),
+                        DEEPSLATE
+                ),
+                SurfaceRules.ifTrue(
+                        SurfaceRules.not(SurfaceRules.yBlockCheck(VerticalAnchor.absolute(8), 0)),
+                        SurfaceRules.ifTrue(
+                                SurfaceRules.noiseCondition(NOODLE_NOISE, -1.0, 0.0),
+                                DEEPSLATE
+                        )
+                ),
+                STONE
+        );
+
+        // Patches calcite/stone via bruit sur les flancs
+        SurfaceRules.RuleSource calcitePatch = SurfaceRules.sequence(
                 SurfaceRules.ifTrue(
                         SurfaceRules.noiseCondition(SURFACE_NOISE, -0.5, 0.5),
                         CALCITE
@@ -41,9 +61,21 @@ public class ModSurfaceRules {
         return SurfaceRules.ifTrue(
                 isRubyHighlands,
                 SurfaceRules.sequence(
-                        // Parois raides → patches calcite/stone
-                        SurfaceRules.ifTrue(SurfaceRules.steep(), steepLayers),
-                        // Surface → grass + dirt
+
+                        SurfaceRules.ifTrue(
+                                SurfaceRules.yBlockCheck(VerticalAnchor.absolute(80), 0),
+                                SurfaceRules.sequence(
+                                        // Seulement 1 bloc de grass tout en haut
+                                        SurfaceRules.ifTrue(
+                                                SurfaceRules.abovePreliminarySurface(),
+                                                SurfaceRules.ifTrue(
+                                                        SurfaceRules.stoneDepthCheck(0, false, 0, CaveSurface.FLOOR),
+                                                        GRASS
+                                                )
+                                        ),
+                                        calcitePatch
+                                )
+                        ),
                         SurfaceRules.ifTrue(
                                 SurfaceRules.abovePreliminarySurface(),
                                 SurfaceRules.sequence(
@@ -55,10 +87,10 @@ public class ModSurfaceRules {
                                                 SurfaceRules.stoneDepthCheck(3, false, 0, CaveSurface.FLOOR),
                                                 DIRT
                                         ),
-                                        STONE
+                                        stoneOrDeepslate
                                 )
                         ),
-                        STONE
+                        stoneOrDeepslate
                 )
         );
     }

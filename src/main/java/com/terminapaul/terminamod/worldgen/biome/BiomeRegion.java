@@ -28,18 +28,11 @@ public class BiomeRegion extends Region {
 
     @Override
     public void addBiomes(Registry<Biome> registry, Consumer<Pair<Climate.ParameterPoint, ResourceKey<Biome>>> mapper) {
-        // Valeurs EXACTES de jagged_peaks vanilla (source: Minecraft 1.20.1 BiomeBuilder)
-        // C'est la zone la plus haute du jeu, Y200+
-        // erosion: -1.0 à -0.375 (très escarpé)
-        // continentalness: 0.3 à 1.0 (terres hautes)
-        // weirdness: 0.05 à 1.0 (pics positifs) et -1.0 à -0.05 (pics négatifs)
-
         Climate.Parameter temp = Climate.Parameter.span(-0.45f, 0.55f);
         Climate.Parameter humidity = FULL_RANGE;
         Climate.Parameter cont = Climate.Parameter.span(0.3f, 1.0f);
-        Climate.Parameter erosion = Climate.Parameter.span(-1.0f, -0.375f);
+        Climate.Parameter erosion = Climate.Parameter.span(-1.0f, -0.7f); // très bas = pentes très abruptes
 
-        // surface (depth=0)
         mapper.accept(Pair.of(Climate.parameters(
                         temp, humidity, cont, erosion,
                         Climate.Parameter.point(0.0f),
@@ -52,7 +45,6 @@ public class BiomeRegion extends Region {
                         Climate.Parameter.span(-1.0f, -0.05f), 0),
                 RUBY_HIGHLANDS));
 
-        // underground (depth=1) - requis pour que les pics soient solides
         mapper.accept(Pair.of(Climate.parameters(
                         temp, humidity, cont, erosion,
                         Climate.Parameter.point(1.0f),
