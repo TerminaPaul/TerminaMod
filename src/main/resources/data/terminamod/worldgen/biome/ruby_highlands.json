@@ -1,15 +1,15 @@
 {
-  "temperature": 0.5,
-  "downfall": 0.8,
+  "temperature": 0.25,
+  "downfall": 0.2,
   "has_precipitation": true,
   "temperature_modifier": "none",
   "effects": {
-    "sky_color": 7907327,
+    "sky_color": 8700927,
     "fog_color": 12638463,
-    "water_color": 6141935,
-    "water_fog_color": 6141935,
-    "grass_color": 11984225,
-    "foliage_color": 11984225,
+    "water_color": 4159204,
+    "water_fog_color": 329011,
+    "grass_color": 6155066,
+    "foliage_color": 4899870,
     "grass_color_modifier": "none"
   },
   "spawners": {
@@ -17,8 +17,7 @@
       {"type": "minecraft:sheep",   "weight": 12, "minCount": 4, "maxCount": 4},
       {"type": "minecraft:cow",     "weight": 10, "minCount": 4, "maxCount": 4},
       {"type": "minecraft:pig",     "weight": 10, "minCount": 4, "maxCount": 4},
-      {"type": "minecraft:chicken", "weight": 10, "minCount": 4, "maxCount": 4},
-      {"type": "minecraft:bee",     "weight": 5,  "minCount": 1, "maxCount": 2}
+      {"type": "minecraft:chicken", "weight": 10, "minCount": 4, "maxCount": 4}
     ],
     "monster": [
       {"type": "minecraft:spider",   "weight": 100, "minCount": 4, "maxCount": 4},
@@ -29,7 +28,12 @@
     ],
     "ambient": [
       {"type": "minecraft:bat", "weight": 10, "minCount": 8, "maxCount": 8}
-    ]
+    ],
+    "axolotls": [],
+    "underground_water_creature": [],
+    "water_creature": [],
+    "water_ambient": [],
+    "misc": []
   },
   "spawn_costs": {},
   "carvers": {
@@ -67,7 +71,6 @@
       "minecraft:ore_lapis_buried",
       "minecraft:ore_copper",
       "minecraft:ore_copper_large",
-      "minecraft:ore_emerald",
       "terminamod:ruby_ore"
     ],
     ["minecraft:disk_sand", "minecraft:disk_clay", "minecraft:disk_gravel"],
@@ -76,7 +79,8 @@
     [
       "terminamod:sparse_cherry",
       "minecraft:flower_default",
-      "minecraft:patch_grass_forest"
+      "minecraft:patch_grass_forest",
+      "minecraft:patch_sugar_cane"
     ],
     [],
     ["minecraft:freeze_top_layer"]

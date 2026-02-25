@@ -20,8 +20,6 @@ public class BiomeRegion extends Region {
             new ResourceLocation(TerminaMod.MOD_ID, "ruby_highlands")
     );
 
-    // Paramètres Climate copiés exactement depuis OverworldBiomeBuilder vanilla
-    // Ces valeurs correspondent aux zones "meadow" et "cherry grove" en montagne
     private static final Climate.Parameter FULL_RANGE = Climate.Parameter.span(-1.0f, 1.0f);
     private static final Climate.Parameter[] temperatures = new Climate.Parameter[]{
             Climate.Parameter.span(-1.0f, -0.45f),
@@ -45,19 +43,18 @@ public class BiomeRegion extends Region {
     @Override
     public void addBiomes(Registry<Biome> registry, Consumer<Pair<Climate.ParameterPoint, ResourceKey<Biome>>> mapper) {
 
-        // Utilise les paramètres exacts de meadow/cherry grove vanilla (temperature 2-3, humidity 1-3)
-        // mais avec continentalness et erosion de haute montagne
-        // temperature index 2 = tempéré (-0.15 à 0.2), index 3 = chaud (0.2 à 0.55)
-        // humidity index 1-3 = modéré
-
+        // Montagnes très hautes avec falaises :
+        // erosion très bas (-1.0 à -0.375) = terrain très escarpé, hautes falaises
+        // continentalness très haut (0.5 à 1.0) = altitude maximale
         for (int i = 2; i <= 3; i++) {
             for (int j = 1; j <= 3; j++) {
+                // Zone principale : très haute avec erosion minimale = falaises verticales
                 this.addBiome(mapper,
                         Climate.parameters(
                                 temperatures[i],
                                 humidities[j],
-                                Climate.Parameter.span(0.3f, 1.0f),    // continentalness : hautes terres
-                                Climate.Parameter.span(-0.375f, -0.2225f), // erosion : plateaux/peaks vanilla
+                                Climate.Parameter.span(0.5f, 1.0f),     // continentalness max
+                                Climate.Parameter.span(-1.0f, -0.375f), // erosion minimal = falaises
                                 Climate.Parameter.point(0.0f),
                                 FULL_RANGE,
                                 0
