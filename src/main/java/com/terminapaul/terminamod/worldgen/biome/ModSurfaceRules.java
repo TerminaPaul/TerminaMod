@@ -33,7 +33,7 @@ public class ModSurfaceRules {
                 BiomeRegion.RUBY_HIGHLANDS
         );
 
-        // Transition stone/deepslate progressive
+        // Transition stone/deepslate progressive -8 / 8
         SurfaceRules.RuleSource stoneOrDeepslate = SurfaceRules.sequence(
                 SurfaceRules.ifTrue(
                         SurfaceRules.not(SurfaceRules.yBlockCheck(VerticalAnchor.absolute(-8), 0)),
@@ -49,7 +49,7 @@ public class ModSurfaceRules {
                 STONE
         );
 
-        // Patches calcite/stone via bruit sur les flancs
+        // calcite/stone
         SurfaceRules.RuleSource calcitePatch = SurfaceRules.sequence(
                 SurfaceRules.ifTrue(
                         SurfaceRules.noiseCondition(SURFACE_NOISE, -0.5, 0.5),
@@ -62,20 +62,24 @@ public class ModSurfaceRules {
                 isRubyHighlands,
                 SurfaceRules.sequence(
 
+                        // Au dessus de Y=80 ET en surface → calcite/stone sauf 1 grass au sommet
                         SurfaceRules.ifTrue(
                                 SurfaceRules.yBlockCheck(VerticalAnchor.absolute(80), 0),
-                                SurfaceRules.sequence(
-                                        // Seulement 1 bloc de grass tout en haut
-                                        SurfaceRules.ifTrue(
-                                                SurfaceRules.abovePreliminarySurface(),
+                                SurfaceRules.ifTrue(
+                                        SurfaceRules.abovePreliminarySurface(), // <-- seulement en surface, pas les grottes
+                                        SurfaceRules.sequence(
+                                                // 1 bloc de grass tout en haut
                                                 SurfaceRules.ifTrue(
                                                         SurfaceRules.stoneDepthCheck(0, false, 0, CaveSurface.FLOOR),
                                                         GRASS
-                                                )
-                                        ),
-                                        calcitePatch
+                                                ),
+                                                // Flancs → calcite/stone
+                                                calcitePatch
+                                        )
                                 )
                         ),
+
+                        // En dessous de Y=80 : surface normale grass + dirt
                         SurfaceRules.ifTrue(
                                 SurfaceRules.abovePreliminarySurface(),
                                 SurfaceRules.sequence(
