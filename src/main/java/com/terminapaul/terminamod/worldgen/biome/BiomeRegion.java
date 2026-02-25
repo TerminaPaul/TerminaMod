@@ -21,20 +21,6 @@ public class BiomeRegion extends Region {
     );
 
     private static final Climate.Parameter FULL_RANGE = Climate.Parameter.span(-1.0f, 1.0f);
-    private static final Climate.Parameter[] temperatures = new Climate.Parameter[]{
-            Climate.Parameter.span(-1.0f, -0.45f),
-            Climate.Parameter.span(-0.45f, -0.15f),
-            Climate.Parameter.span(-0.15f, 0.2f),
-            Climate.Parameter.span(0.2f, 0.55f),
-            Climate.Parameter.span(0.55f, 1.0f)
-    };
-    private static final Climate.Parameter[] humidities = new Climate.Parameter[]{
-            Climate.Parameter.span(-1.0f, -0.35f),
-            Climate.Parameter.span(-0.35f, -0.1f),
-            Climate.Parameter.span(-0.1f, 0.1f),
-            Climate.Parameter.span(0.1f, 0.3f),
-            Climate.Parameter.span(0.3f, 1.0f)
-    };
 
     public BiomeRegion() {
         super(new ResourceLocation(TerminaMod.MOD_ID, "overworld"), RegionType.OVERWORLD, 2);
@@ -42,26 +28,41 @@ public class BiomeRegion extends Region {
 
     @Override
     public void addBiomes(Registry<Biome> registry, Consumer<Pair<Climate.ParameterPoint, ResourceKey<Biome>>> mapper) {
+        // Valeurs EXACTES de jagged_peaks vanilla (source: Minecraft 1.20.1 BiomeBuilder)
+        // C'est la zone la plus haute du jeu, Y200+
+        // erosion: -1.0 à -0.375 (très escarpé)
+        // continentalness: 0.3 à 1.0 (terres hautes)
+        // weirdness: 0.05 à 1.0 (pics positifs) et -1.0 à -0.05 (pics négatifs)
 
-        // Montagnes très hautes avec falaises :
-        // erosion très bas (-1.0 à -0.375) = terrain très escarpé, hautes falaises
-        // continentalness très haut (0.5 à 1.0) = altitude maximale
-        for (int i = 2; i <= 3; i++) {
-            for (int j = 1; j <= 3; j++) {
-                // Zone principale : très haute avec erosion minimale = falaises verticales
-                this.addBiome(mapper,
-                        Climate.parameters(
-                                temperatures[i],
-                                humidities[j],
-                                Climate.Parameter.span(0.5f, 1.0f),     // continentalness max
-                                Climate.Parameter.span(-1.0f, -0.375f), // erosion minimal = falaises
-                                Climate.Parameter.point(0.0f),
-                                FULL_RANGE,
-                                0
-                        ),
-                        RUBY_HIGHLANDS
-                );
-            }
-        }
+        Climate.Parameter temp = Climate.Parameter.span(-0.45f, 0.55f);
+        Climate.Parameter humidity = FULL_RANGE;
+        Climate.Parameter cont = Climate.Parameter.span(0.3f, 1.0f);
+        Climate.Parameter erosion = Climate.Parameter.span(-1.0f, -0.375f);
+
+        // surface (depth=0)
+        mapper.accept(Pair.of(Climate.parameters(
+                        temp, humidity, cont, erosion,
+                        Climate.Parameter.point(0.0f),
+                        Climate.Parameter.span(0.05f, 1.0f), 0),
+                RUBY_HIGHLANDS));
+
+        mapper.accept(Pair.of(Climate.parameters(
+                        temp, humidity, cont, erosion,
+                        Climate.Parameter.point(0.0f),
+                        Climate.Parameter.span(-1.0f, -0.05f), 0),
+                RUBY_HIGHLANDS));
+
+        // underground (depth=1) - requis pour que les pics soient solides
+        mapper.accept(Pair.of(Climate.parameters(
+                        temp, humidity, cont, erosion,
+                        Climate.Parameter.point(1.0f),
+                        Climate.Parameter.span(0.05f, 1.0f), 0),
+                RUBY_HIGHLANDS));
+
+        mapper.accept(Pair.of(Climate.parameters(
+                        temp, humidity, cont, erosion,
+                        Climate.Parameter.point(1.0f),
+                        Climate.Parameter.span(-1.0f, -0.05f), 0),
+                RUBY_HIGHLANDS));
     }
 }

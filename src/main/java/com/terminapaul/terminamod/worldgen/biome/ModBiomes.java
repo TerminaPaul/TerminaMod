@@ -35,7 +35,6 @@ public class ModBiomes {
         spawnBuilder.addSpawn(MobCategory.MONSTER,
                 new MobSpawnSettings.SpawnerData(EntityType.CREEPER, 100, 4, 4));
 
-        // Les features (minerais, arbres, etc.) sont définies dans ruby_highlands.json
         BiomeGenerationSettings.PlainBuilder genBuilder = new BiomeGenerationSettings.PlainBuilder();
 
         return new Biome.BiomeBuilder()

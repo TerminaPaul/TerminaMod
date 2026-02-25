@@ -4,6 +4,7 @@ import com.mojang.logging.LogUtils;
 import com.terminapaul.terminamod.worldgen.ModWorldGen;
 import com.terminapaul.terminamod.worldgen.biome.BiomeRegion;
 import com.terminapaul.terminamod.worldgen.biome.ModBiomes;
+import com.terminapaul.terminamod.worldgen.biome.ModSurfaceRules;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.common.Mod;
@@ -11,6 +12,7 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.slf4j.Logger;
 import terrablender.api.Regions;
+import terrablender.api.SurfaceRuleManager;
 
 @Mod(TerminaMod.MOD_ID)
 public class TerminaMod {
@@ -30,6 +32,13 @@ public class TerminaMod {
     }
 
     private void commonSetup(final FMLCommonSetupEvent event) {
-        event.enqueueWork(() -> Regions.register(new BiomeRegion()));
+        event.enqueueWork(() -> {
+            Regions.register(new BiomeRegion());
+            SurfaceRuleManager.addSurfaceRules(
+                    SurfaceRuleManager.RuleCategory.OVERWORLD,
+                    MOD_ID,
+                    ModSurfaceRules.makeRules()
+            );
+        });
     }
 }
