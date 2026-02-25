@@ -62,9 +62,9 @@ public class ModSurfaceRules {
                 isRubyHighlands,
                 SurfaceRules.sequence(
 
-                        // Au dessus de Y=80 ET en surface → calcite/stone sauf 1 grass au sommet
+                        // Au dessus de Y=64 ET en surface → calcite/stone sauf 1 grass au sommet
                         SurfaceRules.ifTrue(
-                                SurfaceRules.yBlockCheck(VerticalAnchor.absolute(80), 0),
+                                SurfaceRules.yBlockCheck(VerticalAnchor.absolute(64), 0),
                                 SurfaceRules.ifTrue(
                                         SurfaceRules.abovePreliminarySurface(), // <-- seulement en surface, pas les grottes
                                         SurfaceRules.sequence(
