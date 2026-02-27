@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "tools",
+  "pattern": [
+    "~~~",
+    "~#~",
+    " # "
+  ],
+  "key": {
+    "#": {
+      "item": "terminamod:iron_stick"
+    },
+    "~": {
+      "item": "minecraft:obsidian"
+    }
+  },
+  "result": {
+    "item": "terminamod:obsidian_hammer",
+    "count": 1
+  }
+}
