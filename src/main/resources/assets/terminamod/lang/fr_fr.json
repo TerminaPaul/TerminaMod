@@ -1,5 +1,9 @@
 {
   "item.terminamod.ruby": "Rubis",
+  "item.terminamod.ruby_ingot": "Lingot de Rubis",
+  "item.terminamod.ruby_nugget": "Fragment de Rubis",
+  "item.terminamod.iron_stick": "Baton en Fer",
+  "item.terminamod.obsidian_hammer": "Marteau en obsidienne",
   "block.terminamod.ruby_block": "Bloc de Rubis",
   "block.terminamod.ruby_ore": "Minerai de Rubis",
   "block.terminamod.deepslate_ruby_ore": "Minerai de Rubis des abîmes",

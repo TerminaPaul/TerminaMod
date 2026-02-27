@@ -19,6 +19,10 @@ public class ModCreativeModeTabs {
                     .icon(() -> ModItems.RUBY.get().getDefaultInstance())
                     .displayItems((parameters, output) -> {
                         output.accept(ModItems.RUBY.get());
+                        output.accept(ModItems.RUBY_INGOT.get());
+                        output.accept(ModItems.RUBY_NUGGET.get());
+                        output.accept(ModItems.IRON_STICK.get());
+                        output.accept(ModItems.OBSIDIAN_HAMMER.get());
                         output.accept(ModItems.RUBY_BLOCK_ITEM.get());
                         output.accept(ModItems.RUBY_ORE_ITEM.get());
                         output.accept(ModItems.DEEPSLATE_RUBY_ORE_ITEM.get());

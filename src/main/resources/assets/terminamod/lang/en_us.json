@@ -1,5 +1,9 @@
 {
   "item.terminamod.ruby": "Ruby",
+  "item.terminamod.ruby_ingot": "Ruby Ingot",
+  "item.terminamod.ruby_nugget": "Ruby Fragment",
+  "item.terminamod.iron_stick": "Iron Stick",
+  "item.terminamod.obsidian_hammer": "Obsidian Hammer",
   "block.terminamod.ruby_block": "Ruby Block",
   "block.terminamod.ruby_ore": "Ruby Ore",
   "block.terminamod.deepslate_ruby_ore": "Deepslate Ruby Ore",
