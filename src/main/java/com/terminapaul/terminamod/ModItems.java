@@ -30,10 +30,7 @@ public class ModItems {
 
     // Obsidian hammer : durabilité 64, non stackable, peut casser
     public static final RegistryObject<Item> OBSIDIAN_HAMMER = ITEMS.register("obsidian_hammer",
-            () -> new Item(
-                    new Item.Properties()
-                            .durability(64)
-            ));
+            () -> new ObsidianHammerItem(new Item.Properties().durability(64)));
 
     //---------------------------------------------------------------------------------------------------
     // Ruby block item

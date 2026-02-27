@@ -5,6 +5,8 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
@@ -40,7 +42,6 @@ public class HammerEventHandler {
         double reach = 4.0;
         Vec3 endPos = eyePos.add(lookVec.scale(reach));
 
-        // Cherche toutes les entités ruby dans la zone large
         AABB searchBox = new AABB(eyePos, endPos).inflate(1.0);
         List<ItemEntity> rubies = level.getEntitiesOfClass(
                 ItemEntity.class,
@@ -50,12 +51,11 @@ public class HammerEventHandler {
 
         if (rubies.isEmpty()) return;
 
-        // Raycast précis : trouver le ruby dont la hitbox intersecte le rayon du regard
         ItemEntity target = null;
         double closestDist = Double.MAX_VALUE;
 
         for (ItemEntity ruby : rubies) {
-            AABB hitbox = ruby.getBoundingBox().inflate(0.3); // légère tolérance
+            AABB hitbox = ruby.getBoundingBox().inflate(0.3);
             Optional<Vec3> hit = hitbox.clip(eyePos, endPos);
             if (hit.isPresent()) {
                 double dist = eyePos.distanceToSqr(hit.get());
@@ -70,6 +70,15 @@ public class HammerEventHandler {
 
         int rubyCount = target.getItem().getCount();
 
+        // Fortune : chaque niveau donne une chance d'obtenir des nuggets bonus
+        int fortuneLevel = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.BLOCK_FORTUNE, held);
+        int bonusNuggets = 0;
+        for (int i = 0; i < rubyCount; i++) {
+            if (fortuneLevel > 0 && level.random.nextInt(3) < fortuneLevel) {
+                bonusNuggets++;
+            }
+        }
+
         level.playSound(null,
                 target.blockPosition(),
                 SoundEvents.ANVIL_USE,
@@ -79,7 +88,8 @@ public class HammerEventHandler {
 
         target.discard();
 
-        ItemStack nuggets = new ItemStack(ModItems.RUBY_NUGGET.get(), rubyCount * 4);
+        int totalNuggets = rubyCount * 4 + bonusNuggets;
+        ItemStack nuggets = new ItemStack(ModItems.RUBY_NUGGET.get(), totalNuggets);
         ItemEntity nuggetEntity = new ItemEntity(level,
                 target.getX(), target.getY(), target.getZ(), nuggets);
         nuggetEntity.setPickUpDelay(10);
