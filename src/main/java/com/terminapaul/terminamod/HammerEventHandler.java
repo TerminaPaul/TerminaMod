@@ -20,6 +20,15 @@ import java.util.Optional;
 @Mod.EventBusSubscriber(modid = TerminaMod.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class HammerEventHandler {
 
+
+    private static final int[][] FORTUNE_WEIGHTS = {
+            // 1    2    3    4    5    6
+            { 30,  28,  22,  13,   6,   1 }, // Fortune 0
+            { 10,  12,  15,  20,  22,  21 }, // Fortune 1
+            {  5,   8,  12,  20,  25,  30 }, // Fortune 2
+            {  2,   3,   5,  10,  30,  50 }, // Fortune 3
+    };
+
     @SubscribeEvent
     public static void onLeftClickEmpty(PlayerInteractEvent.LeftClickEmpty event) {
         handleHammer(event.getEntity());
@@ -28,6 +37,20 @@ public class HammerEventHandler {
     @SubscribeEvent
     public static void onLeftClickBlock(PlayerInteractEvent.LeftClickBlock event) {
         handleHammer(event.getEntity());
+    }
+
+    private static int rollNuggets(Level level, int fortuneLevel) {
+        int[] weights = FORTUNE_WEIGHTS[Math.min(fortuneLevel, 3)];
+        int totalWeight = 0;
+        for (int w : weights) totalWeight += w;
+
+        int roll = level.random.nextInt(totalWeight);
+        int cumulative = 0;
+        for (int i = 0; i < weights.length; i++) {
+            cumulative += weights[i];
+            if (roll < cumulative) return i + 1;
+        }
+        return 4; // fallback
     }
 
     private static void handleHammer(Player player) {
@@ -69,14 +92,11 @@ public class HammerEventHandler {
         if (target == null) return;
 
         int rubyCount = target.getItem().getCount();
-
-        // Fortune : chaque niveau donne une chance d'obtenir des nuggets bonus
         int fortuneLevel = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.BLOCK_FORTUNE, held);
-        int bonusNuggets = 0;
+
+        int totalNuggets = 0;
         for (int i = 0; i < rubyCount; i++) {
-            if (fortuneLevel > 0 && level.random.nextInt(3) < fortuneLevel) {
-                bonusNuggets++;
-            }
+            totalNuggets += rollNuggets(level, fortuneLevel);
         }
 
         level.playSound(null,
@@ -88,7 +108,6 @@ public class HammerEventHandler {
 
         target.discard();
 
-        int totalNuggets = rubyCount * 4 + bonusNuggets;
         ItemStack nuggets = new ItemStack(ModItems.RUBY_NUGGET.get(), totalNuggets);
         ItemEntity nuggetEntity = new ItemEntity(level,
                 target.getX(), target.getY(), target.getZ(), nuggets);
