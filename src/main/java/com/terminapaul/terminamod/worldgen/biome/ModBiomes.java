@@ -13,14 +13,14 @@ public class ModBiomes {
     public static final DeferredRegister<Biome> BIOMES =
             DeferredRegister.create(Registries.BIOME, TerminaMod.MOD_ID);
 
-    public static final RegistryObject<Biome> RUBY_HIGHLANDS =
-            BIOMES.register("ruby_highlands", ModBiomes::rubyHighlands);
+    public static final RegistryObject<Biome> CHERRY_PEAKS =
+            BIOMES.register("cherry_peaks", ModBiomes::CherryPeaks);
 
     public static void register(IEventBus eventBus) {
         BIOMES.register(eventBus);
     }
 
-    public static Biome rubyHighlands() {
+    public static Biome CherryPeaks() {
         MobSpawnSettings.Builder spawnBuilder = new MobSpawnSettings.Builder();
         spawnBuilder.addSpawn(MobCategory.CREATURE,
                 new MobSpawnSettings.SpawnerData(EntityType.SHEEP, 12, 4, 4));

@@ -4,7 +4,7 @@
     "type": "forge:or",
     "values": [
       "#minecraft:is_mountain",
-      "terminamod:ruby_highlands"
+      "terminamod:cherry_peaks"
     ]
   },
   "features": "terminamod:ruby_ore",

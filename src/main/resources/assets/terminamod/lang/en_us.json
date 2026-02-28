@@ -7,5 +7,6 @@
   "block.terminamod.ruby_block": "Ruby Block",
   "block.terminamod.ruby_ore": "Ruby Ore",
   "block.terminamod.deepslate_ruby_ore": "Deepslate Ruby Ore",
-  "itemGroup.terminamod": "Termina Mod"
+  "itemGroup.terminamod": "Termina Mod",
+  "biome.terminamod.cherry_peaks": "Cherry Peaks"
 }

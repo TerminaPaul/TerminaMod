@@ -15,9 +15,9 @@ import java.util.function.Consumer;
 
 public class BiomeRegion extends Region {
 
-    public static final ResourceKey<Biome> RUBY_HIGHLANDS = ResourceKey.create(
+    public static final ResourceKey<Biome> CHERRY_PEAKS = ResourceKey.create(
             Registries.BIOME,
-            new ResourceLocation(TerminaMod.MOD_ID, "ruby_highlands")
+            new ResourceLocation(TerminaMod.MOD_ID, "cherry_peaks")
     );
 
     private static final Climate.Parameter FULL_RANGE = Climate.Parameter.span(-1.0f, 1.0f);
@@ -37,24 +37,24 @@ public class BiomeRegion extends Region {
                         temp, humidity, cont, erosion,
                         Climate.Parameter.point(0.0f),
                         Climate.Parameter.span(0.05f, 1.0f), 0),
-                RUBY_HIGHLANDS));
+                CHERRY_PEAKS));
 
         mapper.accept(Pair.of(Climate.parameters(
                         temp, humidity, cont, erosion,
                         Climate.Parameter.point(0.0f),
                         Climate.Parameter.span(-1.0f, -0.05f), 0),
-                RUBY_HIGHLANDS));
+                CHERRY_PEAKS));
 
         mapper.accept(Pair.of(Climate.parameters(
                         temp, humidity, cont, erosion,
                         Climate.Parameter.point(1.0f),
                         Climate.Parameter.span(0.05f, 1.0f), 0),
-                RUBY_HIGHLANDS));
+                CHERRY_PEAKS));
 
         mapper.accept(Pair.of(Climate.parameters(
                         temp, humidity, cont, erosion,
                         Climate.Parameter.point(1.0f),
                         Climate.Parameter.span(-1.0f, -0.05f), 0),
-                RUBY_HIGHLANDS));
+                CHERRY_PEAKS));
     }
 }

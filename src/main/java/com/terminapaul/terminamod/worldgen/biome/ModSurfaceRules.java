@@ -29,8 +29,8 @@ public class ModSurfaceRules {
 
     public static SurfaceRules.RuleSource makeRules() {
 
-        SurfaceRules.ConditionSource isRubyHighlands = SurfaceRules.isBiome(
-                BiomeRegion.RUBY_HIGHLANDS
+        SurfaceRules.ConditionSource isCherryPeaks = SurfaceRules.isBiome(
+                BiomeRegion.CHERRY_PEAKS
         );
 
         // Transition stone/deepslate progressive -8 / 8
@@ -59,7 +59,7 @@ public class ModSurfaceRules {
         );
 
         return SurfaceRules.ifTrue(
-                isRubyHighlands,
+                isCherryPeaks,
                 SurfaceRules.sequence(
 
                         // Au dessus de Y=64 ET en surface → calcite/stone sauf 1 grass au sommet

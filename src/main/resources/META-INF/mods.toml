@@ -4,7 +4,7 @@ license="All Rights Reserved"
 
 [[mods]]
 modId="terminamod"
-version="1.1.4"
+version="1.2.0"
 displayName="TerminaMod"
 description='''
 Adds Ruby to Minecraft.
