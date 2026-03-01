@@ -28,10 +28,10 @@ public class BiomeRegion extends Region {
 
     @Override
     public void addBiomes(Registry<Biome> registry, Consumer<Pair<Climate.ParameterPoint, ResourceKey<Biome>>> mapper) {
-        Climate.Parameter temp = Climate.Parameter.span(-0.45f, 0.55f);
-        Climate.Parameter humidity = FULL_RANGE;
-        Climate.Parameter cont = Climate.Parameter.span(0.3f, 1.0f);
-        Climate.Parameter erosion = Climate.Parameter.span(-1.0f, -0.7f); // très bas = pentes très abruptes
+        Climate.Parameter temp = Climate.Parameter.span(-0.45f, 0.2f);
+        Climate.Parameter humidity = Climate.Parameter.span(-0.45f, 0.2f);
+        Climate.Parameter cont = Climate.Parameter.span(0.4f, 1.0f);
+        Climate.Parameter erosion = Climate.Parameter.span(-1.0f, -0.7f);
 
         mapper.accept(Pair.of(Climate.parameters(
                         temp, humidity, cont, erosion,
