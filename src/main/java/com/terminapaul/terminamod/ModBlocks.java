@@ -1,5 +1,6 @@
 package com.terminapaul.terminamod;
 
+import com.terminapaul.terminamod.block.IndustrialSmelterBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.DropExperienceBlock;
 import net.minecraft.world.level.block.SoundType;
@@ -41,6 +42,15 @@ public class ModBlocks {
                             .sound(SoundType.DEEPSLATE)
                             .requiresCorrectToolForDrops(),
                     UniformInt.of(3, 7)
+            ));
+
+    public static final RegistryObject<Block> INDUSTRIAL_SMELTER = BLOCKS.register("industrial_smelter",
+            () -> new IndustrialSmelterBlock(
+                    BlockBehaviour.Properties.of()
+                            .mapColor(MapColor.STONE)
+                            .requiresCorrectToolForDrops()
+                            .strength(3.5f)
+                            .sound(SoundType.STONE)
             ));
 
     public static void register(IEventBus eventBus) {

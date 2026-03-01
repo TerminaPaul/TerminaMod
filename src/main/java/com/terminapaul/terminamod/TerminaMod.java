@@ -27,6 +27,8 @@ public class TerminaMod {
         ModCreativeModeTabs.register(modEventBus);
         ModWorldGen.register(modEventBus);
         ModBiomes.register(modEventBus);
+        ModBlockEntities.register(modEventBus);  // NOUVEAU
+        ModMenuTypes.register(modEventBus);       // NOUVEAU
         modEventBus.addListener(this::commonSetup);
         MinecraftForge.EVENT_BUS.register(this);
     }

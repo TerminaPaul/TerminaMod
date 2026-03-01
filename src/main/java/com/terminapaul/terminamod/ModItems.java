@@ -45,6 +45,10 @@ public class ModItems {
     public static final RegistryObject<Item> DEEPSLATE_RUBY_ORE_ITEM = ITEMS.register("deepslate_ruby_ore",
             () -> new BlockItem(ModBlocks.DEEPSLATE_RUBY_ORE.get(), new Item.Properties()));
 
+    // Industrial Smelter block item  NOUVEAU
+    public static final RegistryObject<Item> INDUSTRIAL_SMELTER_ITEM = ITEMS.register("industrial_smelter",
+            () -> new BlockItem(ModBlocks.INDUSTRIAL_SMELTER.get(), new Item.Properties()));
+
     public static void register(IEventBus eventBus) {
         ITEMS.register(eventBus);
     }
