@@ -34,7 +34,9 @@ public class IndustrialSmelterBlockEntity extends BlockEntity implements MenuPro
     public static final int TICKS_TO_CONVERT = 200;
     public static final int NUGGETS_NEEDED = 64;
 
-    // Slot 0 = input nuggets, Slot 1 = output lingot
+    // TEMPORAIRE : mettre à false une fois que tu as un mod FE
+    public static final boolean DEBUG_INFINITE_FE = true;
+
     private final ItemStackHandler itemHandler = new ItemStackHandler(2) {
         @Override
         public boolean isItemValid(int slot, @Nonnull ItemStack stack) {
@@ -48,7 +50,7 @@ public class IndustrialSmelterBlockEntity extends BlockEntity implements MenuPro
         }
     };
 
-    private final EnergyStorage energyStorage = new EnergyStorage(FE_CAPACITY) {
+    private final EnergyStorage energyStorage = new EnergyStorage(FE_CAPACITY, FE_CAPACITY, FE_CAPACITY, 0) {
         @Override
         public int receiveEnergy(int maxReceive, boolean simulate) {
             int received = super.receiveEnergy(maxReceive, simulate);
@@ -68,6 +70,11 @@ public class IndustrialSmelterBlockEntity extends BlockEntity implements MenuPro
 
     public static void tick(Level level, BlockPos pos, BlockState state, IndustrialSmelterBlockEntity be) {
         if (level.isClientSide()) return;
+
+        if (DEBUG_INFINITE_FE) {
+            be.energyStorage.extractEnergy(be.energyStorage.getEnergyStored(), true);
+            be.energyStorage.receiveEnergy(be.energyStorage.getMaxEnergyStored(), true);
+        }
 
         boolean canProcess = be.canProcess();
 

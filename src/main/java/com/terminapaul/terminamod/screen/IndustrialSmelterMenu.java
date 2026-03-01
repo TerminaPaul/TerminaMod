@@ -8,6 +8,8 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.inventory.ContainerLevelAccess;
+import net.minecraft.world.inventory.DataSlot;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.IItemHandler;
@@ -16,35 +18,31 @@ import net.minecraftforge.items.SlotItemHandler;
 public class IndustrialSmelterMenu extends AbstractContainerMenu {
 
     private final IndustrialSmelterBlockEntity blockEntity;
-    private final ContainerData data;
+
+    // On utilise des DataSlots séparés pour éviter les problèmes de short
+    private final DataSlot progress = DataSlot.standalone();
+    private final DataSlot maxProgress = DataSlot.standalone();
+    private final DataSlot energyLow = DataSlot.standalone();   // bits 0-15 du FE
+    private final DataSlot energyHigh = DataSlot.standalone();  // bits 16-31 du FE
+    private final DataSlot maxEnergyLow = DataSlot.standalone();
+    private final DataSlot maxEnergyHigh = DataSlot.standalone();
+    private final DataSlot nuggetCount = DataSlot.standalone();
 
     public IndustrialSmelterMenu(int id, Inventory inv, IndustrialSmelterBlockEntity be) {
         super(ModMenuTypes.INDUSTRIAL_SMELTER.get(), id);
         this.blockEntity = be;
 
-        this.data = new ContainerData() {
-            @Override
-            public int get(int index) {
-                return switch (index) {
-                    case 0 -> be.getProgress();
-                    case 1 -> be.getMaxProgress();
-                    case 2 -> be.getEnergy();
-                    case 3 -> be.getMaxEnergy();
-                    case 4 -> be.getNuggetCount();
-                    default -> 0;
-                };
-            }
-            @Override
-            public void set(int index, int value) {}
-            @Override
-            public int getCount() { return 5; }
-        };
-
-        addDataSlots(data);
+        addDataSlot(progress);
+        addDataSlot(maxProgress);
+        addDataSlot(energyLow);
+        addDataSlot(energyHigh);
+        addDataSlot(maxEnergyLow);
+        addDataSlot(maxEnergyHigh);
+        addDataSlot(nuggetCount);
 
         IItemHandler handler = be.getItemHandler();
 
-        // Slot input nuggets (slot 0)
+        // Slot input nuggets
         addSlot(new SlotItemHandler(handler, 0, 44, 35) {
             @Override
             public boolean mayPlace(ItemStack stack) {
@@ -52,7 +50,7 @@ public class IndustrialSmelterMenu extends AbstractContainerMenu {
             }
         });
 
-        // Slot output lingot (slot 1) - lecture seule
+        // Slot output lingot - lecture seule
         addSlot(new SlotItemHandler(handler, 1, 116, 35) {
             @Override
             public boolean mayPlace(ItemStack stack) { return false; }
@@ -76,11 +74,30 @@ public class IndustrialSmelterMenu extends AbstractContainerMenu {
                 .getBlockEntity(buf.readBlockPos()));
     }
 
-    public int getProgress() { return data.get(0); }
-    public int getMaxProgress() { return data.get(1); }
-    public int getEnergy() { return data.get(2); }
-    public int getMaxEnergy() { return data.get(3); }
-    public int getNuggetCount() { return data.get(4); }
+    @Override
+    public void broadcastChanges() {
+        // Sync manuelle des valeurs vers les DataSlots
+        progress.set(blockEntity.getProgress());
+        maxProgress.set(blockEntity.getMaxProgress());
+
+        int fe = blockEntity.getEnergy();
+        energyLow.set(fe & 0xFFFF);
+        energyHigh.set((fe >> 16) & 0xFFFF);
+
+        int maxFe = blockEntity.getMaxEnergy();
+        maxEnergyLow.set(maxFe & 0xFFFF);
+        maxEnergyHigh.set((maxFe >> 16) & 0xFFFF);
+
+        nuggetCount.set(blockEntity.getNuggetCount());
+
+        super.broadcastChanges();
+    }
+
+    public int getProgress() { return progress.get(); }
+    public int getMaxProgress() { return maxProgress.get(); }
+    public int getEnergy() { return (energyHigh.get() << 16) | (energyLow.get() & 0xFFFF); }
+    public int getMaxEnergy() { return (maxEnergyHigh.get() << 16) | (maxEnergyLow.get() & 0xFFFF); }
+    public int getNuggetCount() { return nuggetCount.get(); }
 
     @Override
     public boolean stillValid(Player player) { return true; }

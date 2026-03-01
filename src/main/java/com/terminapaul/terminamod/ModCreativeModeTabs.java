@@ -26,6 +26,7 @@ public class ModCreativeModeTabs {
                         output.accept(ModItems.RUBY_BLOCK_ITEM.get());
                         output.accept(ModItems.RUBY_ORE_ITEM.get());
                         output.accept(ModItems.DEEPSLATE_RUBY_ORE_ITEM.get());
+                        output.accept(ModItems.INDUSTRIAL_SMELTER_ITEM.get());
                     })
                     .build());
 
