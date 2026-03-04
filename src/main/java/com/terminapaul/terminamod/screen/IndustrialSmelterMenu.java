@@ -44,7 +44,7 @@ public class IndustrialSmelterMenu extends AbstractContainerMenu {
         IItemHandler handler = be.getItemHandler();
 
         // Slot input nuggets
-        addSlot(new SlotItemHandler(handler, 0, 44, 35) {
+        addSlot(new SlotItemHandler(handler, 0, 44, 69) {
             @Override
             public boolean mayPlace(ItemStack stack) {
                 return stack.is(ModItems.RUBY_NUGGET.get());
@@ -52,7 +52,7 @@ public class IndustrialSmelterMenu extends AbstractContainerMenu {
         });
 
         // Slot output lingot - lecture seule
-        addSlot(new SlotItemHandler(handler, 1, 116, 35) {
+        addSlot(new SlotItemHandler(handler, 1, 116, 69) {
             @Override
             public boolean mayPlace(ItemStack stack) { return false; }
         });
@@ -60,13 +60,13 @@ public class IndustrialSmelterMenu extends AbstractContainerMenu {
         // Inventaire joueur
         for (int row = 0; row < 3; row++) {
             for (int col = 0; col < 9; col++) {
-                addSlot(new Slot(inv, col + row * 9 + 9, 8 + col * 18, 84 + row * 18));
+                addSlot(new Slot(inv, col + row * 9 + 9, 8 + col * 18, 118 + row * 18));
             }
         }
 
         // Barre rapide
         for (int col = 0; col < 9; col++) {
-            addSlot(new Slot(inv, col, 8 + col * 18, 142));
+            addSlot(new Slot(inv, col, 8 + col * 18, 176));
         }
     }
 

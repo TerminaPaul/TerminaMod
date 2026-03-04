@@ -17,7 +17,7 @@ public class IndustrialSmelterScreen extends AbstractContainerScreen<IndustrialS
     public IndustrialSmelterScreen(IndustrialSmelterMenu menu, Inventory inv, Component title) {
         super(menu, inv, title);
         this.imageWidth = 176;
-        this.imageHeight = 166;
+        this.imageHeight = 200;
     }
 
     @Override
@@ -36,23 +36,24 @@ public class IndustrialSmelterScreen extends AbstractContainerScreen<IndustrialS
         int maxProgress = menu.getMaxProgress();
         if (maxProgress > 0 && progress > 0) {
             int progressWidth = (int) (24.0 * progress / maxProgress);
-            graphics.blit(TEXTURE, x + 77, y + 33, 176, 0, progressWidth, 17);
+            graphics.blit(TEXTURE, x + 77, y + 67, 176, 0, progressWidth, 17);
         }
 
-        // Barre FE : 5px de large, 52px de hauteur
+        // Barre FE horizontale : remplit de gauche à droite
         int energy = menu.getEnergy();
         int maxEnergy = menu.getMaxEnergy();
         if (maxEnergy > 0) {
-            int energyHeight = (int) (52.0 * energy / maxEnergy);
-            graphics.blit(TEXTURE, x + 8, y + 14 + (52 - energyHeight),
-                    176, 17, 5, energyHeight);
+            int energyWidth = (int) (52.0 * energy / maxEnergy);
+            if (energyWidth > 0) {
+                graphics.blit(TEXTURE, x + 8, y + 80, 176, 17, energyWidth, 5);
+            }
         }
 
         // Visuel contenant nuggets : 16px large, 40px haute
         int nuggets = menu.getNuggetCount();
         if (nuggets > 0) {
             int fillHeight = (int) (40.0 * nuggets / 64);
-            graphics.blit(TEXTURE, x + 44, y + 15 + (40 - fillHeight),
+            graphics.blit(TEXTURE, x + 44, y + 49 + (40 - fillHeight),
                     181, 17, 16, fillHeight);
         }
     }
@@ -66,15 +67,15 @@ public class IndustrialSmelterScreen extends AbstractContainerScreen<IndustrialS
         int x = (width - imageWidth) / 2;
         int y = (height - imageHeight) / 2;
 
-        // Tooltip FE
-        if (mouseX >= x + 8 && mouseX <= x + 13 && mouseY >= y + 14 && mouseY <= y + 66) {
+        // Tooltip FE — zone de survol alignée sur la barre horizontale
+        if (mouseX >= x + 8 && mouseX <= x + 60 && mouseY >= y + 80 && mouseY <= y + 85) {
             graphics.renderTooltip(font,
                     Component.literal(menu.getEnergy() + " / " + menu.getMaxEnergy() + " FE"),
                     mouseX, mouseY);
         }
 
         // Tooltip nuggets
-        if (mouseX >= x + 44 && mouseX <= x + 60 && mouseY >= y + 15 && mouseY <= y + 55) {
+        if (mouseX >= x + 44 && mouseX <= x + 60 && mouseY >= y + 49 && mouseY <= y + 89) {
             graphics.renderTooltip(font,
                     Component.literal(menu.getNuggetCount() + " / 64 fragments"),
                     mouseX, mouseY);
