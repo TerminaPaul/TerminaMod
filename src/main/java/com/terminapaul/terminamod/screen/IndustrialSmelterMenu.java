@@ -11,7 +11,6 @@ import net.minecraft.world.inventory.ContainerLevelAccess;
 import net.minecraft.world.inventory.DataSlot;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
 
@@ -44,7 +43,7 @@ public class IndustrialSmelterMenu extends AbstractContainerMenu {
         IItemHandler handler = be.getItemHandler();
 
         // Slot input nuggets
-        addSlot(new SlotItemHandler(handler, 0, 44, 69) {
+        addSlot(new SlotItemHandler(handler, 0, 44, 40) {
             @Override
             public boolean mayPlace(ItemStack stack) {
                 return stack.is(ModItems.RUBY_NUGGET.get());
@@ -52,7 +51,7 @@ public class IndustrialSmelterMenu extends AbstractContainerMenu {
         });
 
         // Slot output lingot - lecture seule
-        addSlot(new SlotItemHandler(handler, 1, 116, 69) {
+        addSlot(new SlotItemHandler(handler, 1, 116, 40) {
             @Override
             public boolean mayPlace(ItemStack stack) { return false; }
         });

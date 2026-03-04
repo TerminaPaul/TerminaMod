@@ -34,21 +34,21 @@ public class IndustrialSmelterScreen extends AbstractContainerScreen<IndustrialS
         // Fond principal
         graphics.blit(TEXTURE, x, y, 0, 0, imageWidth, imageHeight);
 
-        // Barre de progression (flèche) : 24px de large
+        // Barre de progression (flèche) :
         int progress = menu.getProgress();
         int maxProgress = menu.getMaxProgress();
         if (maxProgress > 0 && progress > 0) {
-            int progressWidth = (int) (24.0 * progress / maxProgress);
-            graphics.blit(TEXTURE, x + 77, y + 67, 176, 0, progressWidth, 9);
+            int progressWidth = (int) (34.0 * progress / maxProgress);
+            graphics.blit(TEXTURE, x + 71, y + 44, 176, 0, progressWidth, 8);
         }
 
-        // Barre FE horizontale : remplit de gauche à droite (162px max)
+        // Barre FE horizontale : remplit de gauche à droite (160px max)
         int energy = menu.getEnergy();
         int maxEnergy = menu.getMaxEnergy();
         if (maxEnergy > 0) {
-            int energyWidth = (int) (162.0 * energy / maxEnergy);
+            int energyWidth = (int) (160.0 * energy / maxEnergy);
             if (energyWidth > 0) {
-                graphics.blit(TEXTURE, x + 8, y + 90, 0, 200, energyWidth, 5);
+                graphics.blit(TEXTURE, x + 8, y + 91, 8, 200, energyWidth, 5);
             }
         }
 
@@ -68,15 +68,15 @@ public class IndustrialSmelterScreen extends AbstractContainerScreen<IndustrialS
         int x = (width - imageWidth) / 2;
         int y = (height - imageHeight) / 2;
 
-        // Tooltip FE — zone de survol alignée sur la barre horizontale (162px)
-        if (mouseX >= x + 8 && mouseX <= x + 170 && mouseY >= y + 90 && mouseY <= y + 95) {
+        // Tooltip FE
+        if (mouseX >= x + 8 && mouseX <= x + 170 && mouseY >= y + 91 && mouseY <= y + 96) {
             graphics.renderTooltip(font,
                     Component.literal(menu.getEnergy() + " / " + menu.getMaxEnergy() + " FE"),
                     mouseX, mouseY);
         }
 
         // Tooltip nuggets
-        if (mouseX >= x + 44 && mouseX <= x + 60 && mouseY >= y + 49 && mouseY <= y + 89) {
+        if (mouseX >= x + 8 && mouseX <= x + 60 && mouseY >= y + 49 && mouseY <= y + 89) {
             graphics.renderTooltip(font,
                     Component.literal(menu.getNuggetCount() + " / 64 fragments"),
                     mouseX, mouseY);
