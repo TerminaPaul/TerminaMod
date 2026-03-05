@@ -1,6 +1,7 @@
 package com.terminapaul.terminamod;
 
 import com.mojang.logging.LogUtils;
+import com.terminapaul.terminamod.recipe.ModRecipes;
 import com.terminapaul.terminamod.worldgen.ModWorldGen;
 import com.terminapaul.terminamod.worldgen.biome.BiomeRegion;
 import com.terminapaul.terminamod.worldgen.biome.ModBiomes;
@@ -27,8 +28,10 @@ public class TerminaMod {
         ModCreativeModeTabs.register(modEventBus);
         ModWorldGen.register(modEventBus);
         ModBiomes.register(modEventBus);
-        ModBlockEntities.register(modEventBus);  // NOUVEAU
-        ModMenuTypes.register(modEventBus);       // NOUVEAU
+        ModBlockEntities.register(modEventBus);
+        ModMenuTypes.register(modEventBus);
+        ModRecipes.SERIALIZERS.register(modEventBus);
+        ModRecipes.TYPES.register(modEventBus);
         modEventBus.addListener(this::commonSetup);
         MinecraftForge.EVENT_BUS.register(this);
     }

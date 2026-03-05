@@ -26,6 +26,10 @@ public class IndustrialSmelterMenu extends AbstractContainerMenu {
     private final DataSlot maxEnergyLow = DataSlot.standalone();
     private final DataSlot maxEnergyHigh = DataSlot.standalone();
     private final DataSlot nuggetCount = DataSlot.standalone();
+    private final DataSlot requiredCount = DataSlot.standalone();
+    private final DataSlot colorR = DataSlot.standalone(); // rouge 0-255
+    private final DataSlot colorG = DataSlot.standalone(); // vert 0-255
+    private final DataSlot colorB = DataSlot.standalone(); // bleu 0-255
 
     public IndustrialSmelterMenu(int id, Inventory inv, IndustrialSmelterBlockEntity be) {
         super(ModMenuTypes.INDUSTRIAL_SMELTER.get(), id);
@@ -39,18 +43,22 @@ public class IndustrialSmelterMenu extends AbstractContainerMenu {
         addDataSlot(maxEnergyLow);
         addDataSlot(maxEnergyHigh);
         addDataSlot(nuggetCount);
+        addDataSlot(requiredCount);
+        addDataSlot(colorR);
+        addDataSlot(colorG);
+        addDataSlot(colorB);
 
         IItemHandler handler = be.getItemHandler();
 
-        // Slot input nuggets
+        // Slot input - accepte tout item avec une recette valide
         addSlot(new SlotItemHandler(handler, 0, 44, 40) {
             @Override
             public boolean mayPlace(ItemStack stack) {
-                return stack.is(ModItems.RUBY_NUGGET.get());
+                return handler.isItemValid(0, stack);
             }
         });
 
-        // Slot output lingot - lecture seule
+        // Slot output - lecture seule
         addSlot(new SlotItemHandler(handler, 1, 116, 40) {
             @Override
             public boolean mayPlace(ItemStack stack) { return false; }
@@ -76,7 +84,6 @@ public class IndustrialSmelterMenu extends AbstractContainerMenu {
 
     @Override
     public void broadcastChanges() {
-        // Côté serveur uniquement (blockEntity non null et niveau non client)
         if (blockEntity.getLevel() != null && !blockEntity.getLevel().isClientSide()) {
             progress.set(blockEntity.getProgress());
             maxProgress.set(blockEntity.getMaxProgress());
@@ -90,6 +97,12 @@ public class IndustrialSmelterMenu extends AbstractContainerMenu {
             maxEnergyHigh.set((maxFe >> 16) & 0xFFFF);
 
             nuggetCount.set(blockEntity.getNuggetCount());
+            requiredCount.set(blockEntity.getRequiredCount());
+
+            int color = blockEntity.getCurrentColor();
+            colorR.set((color >> 16) & 0xFF);
+            colorG.set((color >> 8) & 0xFF);
+            colorB.set(color & 0xFF);
         }
         super.broadcastChanges();
     }
@@ -99,10 +112,13 @@ public class IndustrialSmelterMenu extends AbstractContainerMenu {
     public int getEnergy() { return (energyHigh.get() << 16) | (energyLow.get() & 0xFFFF); }
     public int getMaxEnergy() { return (maxEnergyHigh.get() << 16) | (maxEnergyLow.get() & 0xFFFF); }
     public int getNuggetCount() { return nuggetCount.get(); }
+    public int getRequiredCount() { return requiredCount.get(); }
+    public int getColor() {
+        return (colorR.get() << 16) | (colorG.get() << 8) | colorB.get();
+    }
 
     @Override
     public boolean stillValid(Player player) {
-        // Vérifie que le joueur est à moins de 8 blocs du block
         return stillValid(access, player, net.minecraft.world.level.block.Blocks.AIR) ||
                 blockEntity.getBlockPos().distSqr(player.blockPosition()) < 64;
     }
@@ -117,19 +133,10 @@ public class IndustrialSmelterMenu extends AbstractContainerMenu {
         ItemStack stackInSlot = slot.getItem();
         itemStack = stackInSlot.copy();
 
-        if (index == 0) {
-            // Slot input → inventaire joueur
-            if (!moveItemStackTo(stackInSlot, 2, slots.size(), true)) return ItemStack.EMPTY;
-        } else if (index == 1) {
-            // Slot output lingot → inventaire joueur
+        if (index == 0 || index == 1) {
             if (!moveItemStackTo(stackInSlot, 2, slots.size(), true)) return ItemStack.EMPTY;
         } else {
-            // Inventaire joueur → slot input nuggets seulement
-            if (stackInSlot.is(ModItems.RUBY_NUGGET.get())) {
-                if (!moveItemStackTo(stackInSlot, 0, 1, false)) return ItemStack.EMPTY;
-            } else {
-                return ItemStack.EMPTY;
-            }
+            if (!moveItemStackTo(stackInSlot, 0, 1, false)) return ItemStack.EMPTY;
         }
 
         if (stackInSlot.isEmpty()) slot.set(ItemStack.EMPTY);

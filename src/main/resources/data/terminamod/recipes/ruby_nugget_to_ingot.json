@@ -1,0 +1,8 @@
+{
+  "type": "terminamod:industrial_smelting",
+  "input": "terminamod:ruby_nugget",
+  "input_count": 64,
+  "output": "terminamod:ruby_ingot",
+  "output_count": 1,
+  "color": "#FF0000"
+}

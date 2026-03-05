@@ -1,7 +1,8 @@
 package com.terminapaul.terminamod.block.entity;
 
 import com.terminapaul.terminamod.ModBlockEntities;
-import com.terminapaul.terminamod.ModItems;
+import com.terminapaul.terminamod.recipe.IndustrialSmelterRecipe;
+import com.terminapaul.terminamod.recipe.ModRecipes;
 import com.terminapaul.terminamod.screen.IndustrialSmelterMenu;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -26,18 +27,24 @@ import net.minecraftforge.items.ItemStackHandler;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.Optional;
 
 public class IndustrialSmelterBlockEntity extends BlockEntity implements MenuProvider {
 
     public static final int FE_CAPACITY = 10000;
     public static final int FE_PER_TICK = 20;
     public static final int TICKS_TO_CONVERT = 200;
-    public static final int NUGGETS_NEEDED = 64;
 
     private final ItemStackHandler itemHandler = new ItemStackHandler(2) {
         @Override
         public boolean isItemValid(int slot, @Nonnull ItemStack stack) {
-            if (slot == 0) return stack.is(ModItems.RUBY_NUGGET.get());
+            if (slot == 0) {
+                if (level == null) return false;
+                SimpleContainer container = new SimpleContainer(stack);
+                return level.getRecipeManager()
+                        .getRecipeFor(ModRecipes.INDUSTRIAL_SMELTER_TYPE.get(), container, level)
+                        .isPresent();
+            }
             return false;
         }
 
@@ -57,6 +64,7 @@ public class IndustrialSmelterBlockEntity extends BlockEntity implements MenuPro
     };
 
     private int progress = 0;
+    private int currentColor = 0xFFFFFF;
 
     private LazyOptional<IItemHandler> lazyItemHandler = LazyOptional.empty();
     private LazyOptional<EnergyStorage> lazyEnergyStorage = LazyOptional.empty();
@@ -68,41 +76,57 @@ public class IndustrialSmelterBlockEntity extends BlockEntity implements MenuPro
     public static void tick(Level level, BlockPos pos, BlockState state, IndustrialSmelterBlockEntity be) {
         if (level.isClientSide()) return;
 
-        boolean canProcess = be.canProcess();
+        Optional<IndustrialSmelterRecipe> recipe = be.getCurrentRecipe();
 
-        if (canProcess && be.energyStorage.getEnergyStored() >= FE_PER_TICK) {
-            be.energyStorage.extractEnergy(FE_PER_TICK, false);
-            be.progress++;
+        if (recipe.isPresent()) {
+            IndustrialSmelterRecipe r = recipe.get();
+            be.currentColor = r.getColor();
 
-            if (be.progress >= TICKS_TO_CONVERT) {
-                be.doConversion();
-                be.progress = 0;
+            if (be.energyStorage.getEnergyStored() >= FE_PER_TICK && be.canProcess(r)) {
+                be.energyStorage.extractEnergy(FE_PER_TICK, false);
+                be.progress++;
+
+                if (be.progress >= TICKS_TO_CONVERT) {
+                    be.doConversion(r);
+                    be.progress = 0;
+                }
+                be.setChanged();
             }
-            be.setChanged();
-        } else if (!canProcess && be.progress > 0) {
-            be.progress = 0;
-            be.setChanged();
+        } else {
+            be.currentColor = 0xFFFFFF;
+            if (be.progress > 0) {
+                be.progress = 0;
+                be.setChanged();
+            }
         }
     }
 
-    private boolean canProcess() {
-        ItemStack input = itemHandler.getStackInSlot(0);
-        if (input.isEmpty() || !input.is(ModItems.RUBY_NUGGET.get())) return false;
-        if (input.getCount() < NUGGETS_NEEDED) return false;
-
-        ItemStack output = itemHandler.getStackInSlot(1);
-        if (output.isEmpty()) return true;
-        if (!output.is(ModItems.RUBY_INGOT.get())) return false;
-        return output.getCount() < output.getMaxStackSize();
+    private Optional<IndustrialSmelterRecipe> getCurrentRecipe() {
+        if (level == null) return Optional.empty();
+        SimpleContainer container = new SimpleContainer(itemHandler.getStackInSlot(0));
+        return level.getRecipeManager()
+                .getRecipeFor(ModRecipes.INDUSTRIAL_SMELTER_TYPE.get(), container, level);
     }
 
-    private void doConversion() {
-        itemHandler.extractItem(0, NUGGETS_NEEDED, false);
+    private boolean canProcess(IndustrialSmelterRecipe recipe) {
+        ItemStack input = itemHandler.getStackInSlot(0);
+        if (input.isEmpty() || input.getCount() < recipe.getInputCount()) return false;
+
+        ItemStack output = itemHandler.getStackInSlot(1);
+        ItemStack result = recipe.getResultItem();
+        if (output.isEmpty()) return true;
+        if (!output.is(result.getItem())) return false;
+        return output.getCount() + result.getCount() <= output.getMaxStackSize();
+    }
+
+    private void doConversion(IndustrialSmelterRecipe recipe) {
+        itemHandler.extractItem(0, recipe.getInputCount(), false);
+        ItemStack result = recipe.getResultItem();
         ItemStack output = itemHandler.getStackInSlot(1);
         if (output.isEmpty()) {
-            itemHandler.setStackInSlot(1, new ItemStack(ModItems.RUBY_INGOT.get(), 1));
+            itemHandler.setStackInSlot(1, result.copy());
         } else {
-            output.grow(1);
+            output.grow(result.getCount());
         }
     }
 
@@ -118,7 +142,15 @@ public class IndustrialSmelterBlockEntity extends BlockEntity implements MenuPro
     public int getMaxProgress() { return TICKS_TO_CONVERT; }
     public int getEnergy() { return energyStorage.getEnergyStored(); }
     public int getMaxEnergy() { return FE_CAPACITY; }
-    public int getNuggetCount() { return itemHandler.getStackInSlot(0).getCount(); }
+    public int getCurrentColor() { return currentColor; }
+    public int getNuggetCount() {
+        Optional<IndustrialSmelterRecipe> recipe = getCurrentRecipe();
+        return recipe.map(r -> itemHandler.getStackInSlot(0).getCount()).orElse(0);
+    }
+    public int getRequiredCount() {
+        Optional<IndustrialSmelterRecipe> recipe = getCurrentRecipe();
+        return recipe.map(IndustrialSmelterRecipe::getInputCount).orElse(0);
+    }
     public ItemStackHandler getItemHandler() { return itemHandler; }
 
     @Override
@@ -159,6 +191,7 @@ public class IndustrialSmelterBlockEntity extends BlockEntity implements MenuPro
         tag.put("inventory", itemHandler.serializeNBT());
         tag.putInt("energy", energyStorage.getEnergyStored());
         tag.putInt("progress", progress);
+        tag.putInt("color", currentColor);
     }
 
     @Override
@@ -167,5 +200,6 @@ public class IndustrialSmelterBlockEntity extends BlockEntity implements MenuPro
         itemHandler.deserializeNBT(tag.getCompound("inventory"));
         energyStorage.receiveEnergy(tag.getInt("energy"), false);
         progress = tag.getInt("progress");
+        currentColor = tag.getInt("color");
     }
 }

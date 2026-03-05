@@ -34,7 +34,7 @@ public class IndustrialSmelterScreen extends AbstractContainerScreen<IndustrialS
         // Fond principal
         graphics.blit(TEXTURE, x, y, 0, 0, imageWidth, imageHeight);
 
-        // Barre de progression (flèche) :
+        // Barre de progression (flèche) : 34px de large
         int progress = menu.getProgress();
         int maxProgress = menu.getMaxProgress();
         if (maxProgress > 0 && progress > 0) {
@@ -52,10 +52,22 @@ public class IndustrialSmelterScreen extends AbstractContainerScreen<IndustrialS
             }
         }
 
-        // Visuel contenant nuggets : 16px large, 64px haute
+        // Gauge minerais avec couleur dynamique selon la recette
         int nuggets = menu.getNuggetCount();
-        if (nuggets > 0) {
-            graphics.blit(TEXTURE, x + 8, y + 20 + (64 - nuggets), 176, 16, 16, nuggets);
+        int required = menu.getRequiredCount();
+        if (nuggets > 0 && required > 0) {
+            int fillHeight = (int) (64.0 * nuggets / required);
+            fillHeight = Math.min(fillHeight, 64);
+
+            // Extraire les composantes RGB de la couleur de la recette
+            int color = menu.getColor();
+            float r = ((color >> 16) & 0xFF) / 255f;
+            float g = ((color >> 8) & 0xFF) / 255f;
+            float b = (color & 0xFF) / 255f;
+
+            RenderSystem.setShaderColor(r, g, b, 1f);
+            graphics.blit(TEXTURE, x + 8, y + 20 + (64 - fillHeight), 176, 16, 16, fillHeight);
+            RenderSystem.setShaderColor(1f, 1f, 1f, 1f); // reset couleur
         }
     }
 
@@ -78,7 +90,7 @@ public class IndustrialSmelterScreen extends AbstractContainerScreen<IndustrialS
         // Tooltip nuggets
         if (mouseX >= x + 8 && mouseX <= x + 60 && mouseY >= y + 49 && mouseY <= y + 89) {
             graphics.renderTooltip(font,
-                    Component.literal(menu.getNuggetCount() + " / 64 fragments"),
+                    Component.literal(menu.getNuggetCount() + " / " + menu.getRequiredCount()),
                     mouseX, mouseY);
         }
     }
