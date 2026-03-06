@@ -40,7 +40,7 @@ public class IndustrialSmelterBlockEntity extends BlockEntity implements MenuPro
         public boolean isItemValid(int slot, @Nonnull ItemStack stack) {
             if (slot == 0) {
                 if (level == null) return false;
-                SimpleContainer container = new SimpleContainer(stack);
+                SimpleContainer container = new SimpleContainer(new ItemStack(stack.getItem(), 64));
                 return level.getRecipeManager()
                         .getRecipeFor(ModRecipes.INDUSTRIAL_SMELTER_TYPE.get(), container, level)
                         .isPresent();
@@ -103,7 +103,9 @@ public class IndustrialSmelterBlockEntity extends BlockEntity implements MenuPro
 
     private Optional<IndustrialSmelterRecipe> getCurrentRecipe() {
         if (level == null) return Optional.empty();
-        SimpleContainer container = new SimpleContainer(itemHandler.getStackInSlot(0));
+        ItemStack input = itemHandler.getStackInSlot(0);
+        if (input.isEmpty()) return Optional.empty();
+        SimpleContainer container = new SimpleContainer(new ItemStack(input.getItem(), 64));
         return level.getRecipeManager()
                 .getRecipeFor(ModRecipes.INDUSTRIAL_SMELTER_TYPE.get(), container, level);
     }
@@ -143,10 +145,7 @@ public class IndustrialSmelterBlockEntity extends BlockEntity implements MenuPro
     public int getEnergy() { return energyStorage.getEnergyStored(); }
     public int getMaxEnergy() { return FE_CAPACITY; }
     public int getCurrentColor() { return currentColor; }
-    public int getNuggetCount() {
-        Optional<IndustrialSmelterRecipe> recipe = getCurrentRecipe();
-        return recipe.map(r -> itemHandler.getStackInSlot(0).getCount()).orElse(0);
-    }
+    public int getNuggetCount() { return itemHandler.getStackInSlot(0).getCount(); }
     public int getRequiredCount() {
         Optional<IndustrialSmelterRecipe> recipe = getCurrentRecipe();
         return recipe.map(IndustrialSmelterRecipe::getInputCount).orElse(0);
