@@ -1,6 +1,12 @@
 {
-  "parent": "minecraft:block/cube_all",
+  "parent": "minecraft:block/cube",
   "textures": {
-    "all": "terminamod:block/industrial_smelter"
+    "north": "terminamod:block/industrial_smelter_front",
+    "south": "terminamod:block/industrial_smelter_side",
+    "east": "terminamod:block/industrial_smelter_side",
+    "west": "terminamod:block/industrial_smelter_side",
+    "up": "terminamod:block/industrial_smelter_top",
+    "down": "terminamod:block/industrial_smelter_bottom",
+    "particle": "terminamod:block/industrial_smelter_side"
   }
 }
