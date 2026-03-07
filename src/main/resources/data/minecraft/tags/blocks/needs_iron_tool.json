@@ -3,6 +3,7 @@
   "values": [
     "terminamod:ruby_block",
     "terminamod:ruby_ore",
-    "terminamod:deepslate_ruby_ore"
+    "terminamod:deepslate_ruby_ore",
+    "terminamod:industrial_smelter"
   ]
 }

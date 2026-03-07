@@ -1,5 +1,8 @@
 {
   "variants": {
-    "": { "model": "terminamod:block/industrial_smelter" }
+    "facing=north": { "model": "terminamod:block/industrial_smelter" },
+    "facing=south": { "model": "terminamod:block/industrial_smelter", "y": 180 },
+    "facing=east":  { "model": "terminamod:block/industrial_smelter", "y": 90 },
+    "facing=west":  { "model": "terminamod:block/industrial_smelter", "y": 270 }
   }
 }

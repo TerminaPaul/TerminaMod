@@ -40,6 +40,7 @@ public class IndustrialSmelterBlockEntity extends BlockEntity implements MenuPro
         public boolean isItemValid(int slot, @Nonnull ItemStack stack) {
             if (slot == 0) {
                 if (level == null) return false;
+                // On vérifie juste le type d'item, pas le count
                 SimpleContainer container = new SimpleContainer(new ItemStack(stack.getItem(), 64));
                 return level.getRecipeManager()
                         .getRecipeFor(ModRecipes.INDUSTRIAL_SMELTER_TYPE.get(), container, level)
@@ -105,6 +106,7 @@ public class IndustrialSmelterBlockEntity extends BlockEntity implements MenuPro
         if (level == null) return Optional.empty();
         ItemStack input = itemHandler.getStackInSlot(0);
         if (input.isEmpty()) return Optional.empty();
+        // Force count à 64 pour trouver la recette peu importe la quantité actuelle
         SimpleContainer container = new SimpleContainer(new ItemStack(input.getItem(), 64));
         return level.getRecipeManager()
                 .getRecipeFor(ModRecipes.INDUSTRIAL_SMELTER_TYPE.get(), container, level);
@@ -145,7 +147,9 @@ public class IndustrialSmelterBlockEntity extends BlockEntity implements MenuPro
     public int getEnergy() { return energyStorage.getEnergyStored(); }
     public int getMaxEnergy() { return FE_CAPACITY; }
     public int getCurrentColor() { return currentColor; }
-    public int getNuggetCount() { return itemHandler.getStackInSlot(0).getCount(); }
+    public int getNuggetCount() {
+        return itemHandler.getStackInSlot(0).getCount();
+    }
     public int getRequiredCount() {
         Optional<IndustrialSmelterRecipe> recipe = getCurrentRecipe();
         return recipe.map(IndustrialSmelterRecipe::getInputCount).orElse(0);
@@ -167,7 +171,15 @@ public class IndustrialSmelterBlockEntity extends BlockEntity implements MenuPro
     @Override
     public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
         if (cap == ForgeCapabilities.ITEM_HANDLER) return lazyItemHandler.cast();
-        if (cap == ForgeCapabilities.ENERGY) return lazyEnergyStorage.cast();
+        if (cap == ForgeCapabilities.ENERGY) {
+            // Bloque l'alimentation FE depuis la face front
+            if (side != null && level != null) {
+                BlockState state = level.getBlockState(worldPosition);
+                Direction facing = state.getValue(com.terminapaul.terminamod.block.IndustrialSmelterBlock.FACING);
+                if (side == facing) return LazyOptional.empty();
+            }
+            return lazyEnergyStorage.cast();
+        }
         return super.getCapability(cap, side);
     }
 
