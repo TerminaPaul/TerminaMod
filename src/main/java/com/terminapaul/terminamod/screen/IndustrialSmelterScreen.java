@@ -1,7 +1,6 @@
 package com.terminapaul.terminamod.screen;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.platform.GlStateManager;
 import com.terminapaul.terminamod.TerminaMod;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -35,10 +34,10 @@ public class IndustrialSmelterScreen extends AbstractContainerScreen<IndustrialS
         int x = (width - imageWidth) / 2;
         int y = (height - imageHeight) / 2;
 
-        // Fond principal
+        // 1. Fond principal
         graphics.blit(TEXTURE, x, y, 0, 0, imageWidth, imageHeight);
 
-        // Barre de progression (flèche) : 34px de large
+        // 2. Barre de progression (flèche)
         int progress = menu.getProgress();
         int maxProgress = menu.getMaxProgress();
         if (maxProgress > 0 && progress > 0) {
@@ -46,7 +45,7 @@ public class IndustrialSmelterScreen extends AbstractContainerScreen<IndustrialS
             graphics.blit(TEXTURE, x + 71, y + 44, 176, 0, progressWidth, 8);
         }
 
-        // Barre FE horizontale
+        // 3. Barre FE horizontale
         int energy = menu.getEnergy();
         int maxEnergy = menu.getMaxEnergy();
         if (maxEnergy > 0) {
@@ -56,7 +55,7 @@ public class IndustrialSmelterScreen extends AbstractContainerScreen<IndustrialS
             }
         }
 
-        // Gauge liquide animée
+        // 4. Liquide animé
         int nuggets = menu.getNuggetCount();
         int required = menu.getRequiredCount();
         if (nuggets > 0 && required > 0) {
@@ -88,7 +87,6 @@ public class IndustrialSmelterScreen extends AbstractContainerScreen<IndustrialS
                     (int)(fillHeight * scale)
             );
 
-            // Tile le sprite 16x16 sur toute la hauteur
             for (int tileY = gaugeTopY; tileY < gaugeTopY + fillHeight; tileY += 16) {
                 graphics.blit(gaugeX, tileY, 0, 16, 16, waterSprite);
             }
@@ -96,6 +94,9 @@ public class IndustrialSmelterScreen extends AbstractContainerScreen<IndustrialS
             GL11.glDisable(GL11.GL_SCISSOR_TEST);
             RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
         }
+
+
+        graphics.blit(TEXTURE, x + 8, y + 20, 176, 16, 16, 64);
     }
 
     @Override
