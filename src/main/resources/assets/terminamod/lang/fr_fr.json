@@ -6,9 +6,10 @@
   "item.terminamod.obsidian_hammer": "Marteau en obsidienne",
   "block.terminamod.ruby_block": "Bloc de Rubis",
   "block.terminamod.ruby_ore": "Minerai de Rubis",
-  "block.terminamod.deepslate_ruby_ore": "Minerai de Rubis des abîmes",
   "block.terminamod.industrial_smelter": "Four Industriel",
+  "block.terminamod.deepslate_ruby_ore": "Minerai de Rubis des abîmes",
   "itemGroup.terminamod": "Termina Mod",
   "biome.terminamod.cherry_peaks": "Pics Cerisiers",
-  "entity.terminamod.smelter": "Smelter"
+  "entity.terminamod.smelter": "Smelter",
+  "item.terminamod.smelter_spawn.egg": "Smelter Spawn Egg"
 }
