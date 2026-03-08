@@ -32,6 +32,7 @@ public class TerminaMod {
         ModMenuTypes.register(modEventBus);
         ModRecipes.SERIALIZERS.register(modEventBus);
         ModRecipes.TYPES.register(modEventBus);
+        ModEntities.register(modEventBus);  // ← nouveau
         modEventBus.addListener(this::commonSetup);
         MinecraftForge.EVENT_BUS.register(this);
     }
