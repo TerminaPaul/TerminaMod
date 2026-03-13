@@ -28,9 +28,6 @@ public class SmelterModel extends EntityModel<SmelterEntity> {
         MeshDefinition mesh = new MeshDefinition();
         PartDefinition root = mesh.getRoot();
 
-        // H=24 : hauteur standard Minecraft. Formule : addBox_y = H - to_Y_BB
-        // Tous les pivots à ZERO sauf jambes et bras qui ont des pivots propres
-
         // ── CORPS pivot (0,0,0) ────────────────────────────────────────────────
         // body   BB to_Y=24 → y=24-24=0
         // jacket BB to_Y=24 → y=24-24=0
@@ -57,8 +54,8 @@ public class SmelterModel extends EntityModel<SmelterEntity> {
                 CubeListBuilder.create()
                         .texOffs(32,  0).addBox(-4.5f, -13,    -4,    9, 4, 9)
                         .texOffs( 0,  0).addBox(  -1,  -13.5f, -0.5f, 2, 1, 2)
-                        .texOffs(45, 13).addBox(-4.5f, -10,    -9,    9, 1, 5),
-                PartPose.offsetAndRotation(0, 0, 0,
+                        .texOffs(45, 13).addBox(-4.5f, -9,    -9,    9, 1, 5), // X Y Z largeur hauteur profondeur
+                PartPose.offsetAndRotation(0, 1, -3, //x y z (- = gauche monte devant)
                         (float) Math.toRadians(-15), 0, 0));
 
         // ── BRAS pivot (0, 3, -1) ──────────────────────────────────────────────
