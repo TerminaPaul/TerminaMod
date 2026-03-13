@@ -1,5 +1,6 @@
 package com.terminapaul.terminamod;
 
+import com.terminapaul.terminamod.item.RedCapItem;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.common.ForgeSpawnEggItem;
@@ -43,6 +44,9 @@ public class ModItems {
     public static final RegistryObject<Item> SMELTER_SPAWN_EGG = ITEMS.register("smelter_spawn_egg",
             () -> new ForgeSpawnEggItem(ModEntities.SMELTER, 0x4A2F1A, 0xFF8C00,
                     new Item.Properties()));
+
+    public static final RegistryObject<RedCapItem> RED_CAP = ITEMS.register("red_cap",
+            () -> new RedCapItem());
 
     public static void register(IEventBus eventBus) {
         ITEMS.register(eventBus);

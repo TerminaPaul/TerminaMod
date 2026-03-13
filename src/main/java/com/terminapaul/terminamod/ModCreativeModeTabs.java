@@ -27,6 +27,7 @@ public class ModCreativeModeTabs {
                         output.accept(ModItems.DEEPSLATE_RUBY_ORE_ITEM.get());
                         output.accept(ModItems.INDUSTRIAL_SMELTER_ITEM.get());
                         output.accept(ModItems.SMELTER_SPAWN_EGG.get());
+                        output.accept(ModItems.RED_CAP.get());
                     })
                     .build());
 

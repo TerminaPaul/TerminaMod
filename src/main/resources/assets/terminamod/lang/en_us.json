@@ -11,5 +11,6 @@
   "itemGroup.terminamod": "Termina Mod",
   "biome.terminamod.cherry_peaks": "Cherry Peaks",
   "entity.terminamod.smelter": "Smelter",
-  "item.terminamod.smelter_spawn_egg": "Smelter Spawn Egg"
+  "item.terminamod.smelter_spawn_egg": "Smelter Spawn Egg",
+  "item.terminamod.red_cap": "Red Cap"
 }
