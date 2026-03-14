@@ -6,7 +6,6 @@ import com.terminapaul.terminamod.client.renderer.RedCapArmorRenderer;
 import com.terminapaul.terminamod.client.renderer.RedCapItemRenderer;
 import com.terminapaul.terminamod.client.renderer.SmelterModelLayers;
 import com.terminapaul.terminamod.client.renderer.SmelterRenderer;
-import net.minecraft.client.model.PlayerModel;
 import net.minecraft.client.renderer.entity.player.PlayerRenderer;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityRenderersEvent;
