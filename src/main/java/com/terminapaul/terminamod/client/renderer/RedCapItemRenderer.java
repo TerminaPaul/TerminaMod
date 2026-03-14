@@ -57,11 +57,12 @@ public class RedCapItemRenderer extends BlockEntityWithoutLevelRenderer {
 
         } else if (context == ItemDisplayContext.GUI) {
             // Centré dans la case inventaire
-            poseStack.translate(0.5, 0.5, 0.5);
-            poseStack.mulPose(Axis.XP.rotationDegrees(30));
-            poseStack.mulPose(Axis.YP.rotationDegrees(-45));
+            poseStack.mulPose(Axis.XP.rotationDegrees(37.5f));
+            poseStack.mulPose(Axis.YP.rotationDegrees(-35));
+            poseStack.mulPose(Axis.ZP.rotationDegrees(10));
+            poseStack.translate(0, 0, 0);
             poseStack.scale(1.0f, -1.0f, -1.0f);
-            poseStack.translate(-0.5, 0.0, -0.5);
+
 
         } else {
             // Fallback pour main, head, etc.
