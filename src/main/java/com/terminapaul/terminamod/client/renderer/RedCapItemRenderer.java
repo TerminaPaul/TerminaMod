@@ -13,6 +13,7 @@ import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
+import com.mojang.math.Axis;
 
 public class RedCapItemRenderer extends BlockEntityWithoutLevelRenderer {
 
@@ -44,23 +45,16 @@ public class RedCapItemRenderer extends BlockEntityWithoutLevelRenderer {
 
         poseStack.pushPose();
 
-        // Scale plus grand que 0.0625 pour que le chapeau soit visible dans l'inventaire.
-        // Le chapeau fait ~9 unités de large → avec scale 0.1 il fait 0.9 blocs → bien visible.
-        // On centre manuellement en compensant le bone offset (0,-12,-9).
-        float scale = 0.1f;
+        // 2. Rotation diagonale style inventaire Minecraft
+        poseStack.mulPose(Axis.XP.rotationDegrees(20));
+        poseStack.mulPose(Axis.YP.rotationDegrees(-45));
+
+        //float scale = 1f;
 
         poseStack.translate(0.5, 0.5, 0.5);
-        poseStack.scale(scale, -scale, -scale);
+        poseStack.scale(0.75f, -0.75f, -0.75f);
 
-        // Compenser le bone offset (0,-12,-9) après scale:
-        // Y: -12 * -scale = +1.2 → déjà compensé par le scale négatif
-        // Z: -9 * -scale = +0.9 → déjà compensé
-        // Les cubes sont à Y: -1 à 4, Z: 0 à 14 relatifs au bone
-        // Centre cubes: Y ≈ 1.5, Z ≈ 7 → en monde: Y ≈ -0.15, Z ≈ -0.7
-        // + bone: Y = 1.2 - 0.15 = 1.05, Z = 0.9 - 0.7 = 0.2
-        // Pour centrer à 0: translate(0, -1.05/scale * ... )
-        // Plus simple: on translate le bone offset directement en unités ModelPart
-        poseStack.translate(0, -12, -9);  // annule le bone offset → chapeau centré à l'origine
+        //poseStack.translate(0, -12, -9);  // annule le bone offset → chapeau centré à l'origine
 
         VertexConsumer consumer = buffer.getBuffer(RenderType.entityCutoutNoCull(TEXTURE));
         getModel().renderToBuffer(poseStack, consumer, packedLight,
