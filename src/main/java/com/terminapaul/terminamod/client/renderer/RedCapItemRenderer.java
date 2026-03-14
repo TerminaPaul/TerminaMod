@@ -45,16 +45,34 @@ public class RedCapItemRenderer extends BlockEntityWithoutLevelRenderer {
 
         poseStack.pushPose();
 
-        // 2. Rotation diagonale style inventaire Minecraft
-        poseStack.mulPose(Axis.XP.rotationDegrees(20));
-        poseStack.mulPose(Axis.YP.rotationDegrees(-45));
+        if (context == ItemDisplayContext.GROUND) {
+            float tick = (float)(Minecraft.getInstance().level.getGameTime() % 360);
+            float angle = tick * 2f;
 
-        //float scale = 1f;
+            // Centre le pivot, tourne, puis corrige l'origine du modèle armure
+            poseStack.translate(0.5, 0.5, 0.5);
+            poseStack.mulPose(Axis.YP.rotationDegrees(angle));
+            poseStack.scale(0.6f, -0.6f, -0.6f);
+            poseStack.translate(0, 0.5, 0);
 
-        poseStack.translate(0.5, 0.5, 0.5);
-        poseStack.scale(0.75f, -0.75f, -0.75f);
+        } else if (context == ItemDisplayContext.GUI) {
+            // Centré dans la case inventaire
+            poseStack.translate(0.5, 0.5, 0.5);
+            poseStack.mulPose(Axis.XP.rotationDegrees(30));
+            poseStack.mulPose(Axis.YP.rotationDegrees(-45));
+            poseStack.scale(1.0f, -1.0f, -1.0f);
+            poseStack.translate(-0.5, 0.0, -0.5);
 
-        //poseStack.translate(0, -12, -9);  // annule le bone offset → chapeau centré à l'origine
+        } else {
+            // Fallback pour main, head, etc.
+            poseStack.translate(0.5, 0.5, 0.5);
+            poseStack.mulPose(Axis.XP.rotationDegrees(30)); //30 //
+            poseStack.mulPose(Axis.YP.rotationDegrees(-25)); //-45
+            poseStack.mulPose(Axis.ZP.rotationDegrees(0));// oe non (roulil)
+
+            poseStack.scale(0.6f, -0.6f, -0.6f);
+            poseStack.translate(0, 0, 0);
+        }
 
         VertexConsumer consumer = buffer.getBuffer(RenderType.entityCutoutNoCull(TEXTURE));
         getModel().renderToBuffer(poseStack, consumer, packedLight,
