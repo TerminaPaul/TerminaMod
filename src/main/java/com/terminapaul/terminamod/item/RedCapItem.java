@@ -19,7 +19,7 @@ public class RedCapItem extends ArmorItem {
         @Override public int getEnchantmentValue() { return 0; }
         @Override public SoundEvent getEquipSound() { return SoundEvents.ARMOR_EQUIP_LEATHER; }
         @Override public Ingredient getRepairIngredient() { return Ingredient.EMPTY; }
-        @Override public String getName() { return "terminamod:red_cap"; }
+        @Override public String getName() { return "terminamod:no_texture"; }
         @Override public float getToughness() { return 0; }
         @Override public float getKnockbackResistance() { return 0; }
     };
