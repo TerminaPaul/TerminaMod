@@ -20,7 +20,6 @@ public class RedCapModel extends EntityModel<SmelterEntity> {
         MeshDefinition meshdefinition = new MeshDefinition();
         PartDefinition partdefinition = meshdefinition.getRoot();
 
-        // Code généré directement par Blockbench Export Java Entity
         partdefinition.addOrReplaceChild("bone",
                 CubeListBuilder.create()
                         .texOffs(0, 0).addBox(-4.5F, -1.0F, 5.0F, 9.0F, 4.0F, 9.0F, new CubeDeformation(0.0F))
