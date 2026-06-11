@@ -42,7 +42,7 @@ public class ModItems {
             () -> new BlockItem(ModBlocks.INDUSTRIAL_SMELTER.get(), new Item.Properties()));
 
     public static final RegistryObject<Item> SMELTER_SPAWN_EGG = ITEMS.register("smelter_spawn_egg",
-            () -> new ForgeSpawnEggItem(ModEntities.SMELTER, 0x4A2F1A, 0xFF8C00,
+            () -> new ForgeSpawnEggItem(ModEntities.SMELTER, 0x00bbff, 0xF21E22,
                     new Item.Properties()));
 
     public static final RegistryObject<RedCapItem> RED_CAP = ITEMS.register("red_cap",
