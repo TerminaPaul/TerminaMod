@@ -62,12 +62,27 @@ public class RedCapItemRenderer extends BlockEntityWithoutLevelRenderer {
             poseStack.mulPose(Axis.ZP.rotationDegrees(10));
             poseStack.scale(1.0f, -1.0f, -1.0f);
             poseStack.translate(0.8f, -0.25, 0);
+
+        } else if (context == ItemDisplayContext.THIRD_PERSON_RIGHT_HAND) {
+            poseStack.translate(0.5, 0.5, 0.5);
+            poseStack.mulPose(Axis.XP.rotationDegrees(90));
+            poseStack.mulPose(Axis.YP.rotationDegrees(0));
+            poseStack.mulPose(Axis.ZP.rotationDegrees(0));
+            poseStack.scale(0.6f, -0.6f, -0.6f);
+            poseStack.translate(0, 0.5, 0.5);
+
+        } else if (context == ItemDisplayContext.FIRST_PERSON_RIGHT_HAND) {
+            poseStack.translate(0.5, 0.5, 0.5);
+            poseStack.mulPose(Axis.XP.rotationDegrees(30));
+            poseStack.mulPose(Axis.YP.rotationDegrees(-25));
+            poseStack.scale(0.6f, -0.6f, -0.6f);
+            poseStack.translate(0, 0, 0);
+
         } else {
             poseStack.translate(0.5, 0.5, 0.5);
             poseStack.mulPose(Axis.XP.rotationDegrees(30)); //30 //
             poseStack.mulPose(Axis.YP.rotationDegrees(-25)); //-45
             poseStack.mulPose(Axis.ZP.rotationDegrees(0));// oe non (roulil)
-
             poseStack.scale(0.6f, -0.6f, -0.6f);
             poseStack.translate(0, 0, 0);
         }
