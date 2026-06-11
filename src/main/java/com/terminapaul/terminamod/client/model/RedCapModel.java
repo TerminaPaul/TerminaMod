@@ -29,7 +29,7 @@ public class RedCapModel extends EntityModel<SmelterEntity> {
 
         return LayerDefinition.create(meshdefinition, 96, 96);
     }
-
+    //test
     @Override
     public void setupAnim(SmelterEntity entity, float limbSwing, float limbSwingAmount,
                           float ageInTicks, float netHeadYaw, float headPitch) {}
