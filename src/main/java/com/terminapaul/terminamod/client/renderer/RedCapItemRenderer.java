@@ -46,26 +46,23 @@ public class RedCapItemRenderer extends BlockEntityWithoutLevelRenderer {
         poseStack.pushPose();
 
         if (context == ItemDisplayContext.GROUND) {
+            //Sur le Sol
             float tick = (float)(Minecraft.getInstance().level.getGameTime() % 360);
             float angle = tick * 2f;
 
-            // Centre le pivot, tourne, puis corrige l'origine du modèle armure
             poseStack.translate(0.5, 0.5, 0.5);
             poseStack.mulPose(Axis.YP.rotationDegrees(angle));
             poseStack.scale(0.6f, -0.6f, -0.6f);
             poseStack.translate(0, 0.5, 0);
 
         } else if (context == ItemDisplayContext.GUI) {
-            // Centré dans la case inventaire
+            //Inventaire
             poseStack.mulPose(Axis.XP.rotationDegrees(37.5f));
             poseStack.mulPose(Axis.YP.rotationDegrees(-35));
             poseStack.mulPose(Axis.ZP.rotationDegrees(10));
-            poseStack.translate(0, 0, 0);
             poseStack.scale(1.0f, -1.0f, -1.0f);
-
-
+            poseStack.translate(0.8f, -0.25, 0);
         } else {
-            // Fallback pour main, head, etc.
             poseStack.translate(0.5, 0.5, 0.5);
             poseStack.mulPose(Axis.XP.rotationDegrees(30)); //30 //
             poseStack.mulPose(Axis.YP.rotationDegrees(-25)); //-45
