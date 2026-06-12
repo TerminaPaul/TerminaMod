@@ -196,15 +196,20 @@ public class SmelterEntity extends PathfinderMob implements Merchant {
 
     /** Trades disponibles dès le niveau 1. */
     private void buildInitialTrades() {
-        // Niveau 1
+        // Niveau 1 — ratio Ruby → Ingot aléatoire entre 4 et 7
+        int rubyCost = 4 + this.random.nextInt(4); // 4,5,6 ou 7
         this.offers.add(new MerchantOffer(
-                new ItemStack(ModItems.RUBY.get(), 5),
+                new ItemStack(ModItems.RUBY.get(), rubyCost),
                 new ItemStack(ModItems.RUBY_INGOT.get(), 1),
                 12, 5, 0.05f));
+
+        // Niveau 1 — ratio Nugget → Ruby aléatoire entre 8 et 12
+        int nuggetCost = 8 + this.random.nextInt(5); // 8 à 12
         this.offers.add(new MerchantOffer(
-                new ItemStack(ModItems.RUBY_NUGGET.get(), 10),
+                new ItemStack(ModItems.RUBY_NUGGET.get(), nuggetCost),
                 new ItemStack(ModItems.RUBY.get(), 1),
                 12, 5, 0.05f));
+
         // Si le Smelter est déjà niveau 2+ au chargement, débloquer les trades supérieurs
         for (int lvl = 2; lvl <= villagerLevel; lvl++) {
             unlockTradesForLevel(lvl);
