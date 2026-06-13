@@ -5,12 +5,12 @@
   "spawn_overrides": {},
   "start_pool": "terminamod:smiths_cottage",
   "size": 1,
-  "max_distance_from_center": 20,
+  "max_distance_from_center": 116,
   "use_expansion_hack": false,
   "start_height": {
     "type": "minecraft:constant",
     "value": { "absolute": 0 }
   },
   "project_start_to_heightmap": "WORLD_SURFACE_WG",
-  "terrain_adaptation": "beard_box"
+  "terrain_adaptation": "beard_thin"
 }
