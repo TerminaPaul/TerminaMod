@@ -1,11 +1,11 @@
 {
   "type": "minecraft:jigsaw",
-  "biomes": "terminamod:cherry_peaks",
+  "biomes": "#minecraft:has_structure/terminamod/smiths_cottage",
   "step": "surface_structures",
   "spawn_overrides": {},
   "start_pool": "terminamod:smiths_cottage",
   "size": 1,
-  "max_distance_from_center": 80,
+  "max_distance_from_center": 116,
   "use_expansion_hack": false,
   "start_height": {
     "type": "minecraft:constant",
