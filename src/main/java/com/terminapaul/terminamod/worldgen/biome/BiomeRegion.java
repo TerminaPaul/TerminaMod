@@ -20,41 +20,27 @@ public class BiomeRegion extends Region {
             new ResourceLocation(TerminaMod.MOD_ID, "cherry_peaks")
     );
 
-    private static final Climate.Parameter FULL_RANGE = Climate.Parameter.span(-1.0f, 1.0f);
-
     public BiomeRegion() {
-        super(new ResourceLocation(TerminaMod.MOD_ID, "overworld"), RegionType.OVERWORLD, 2);
+        super(new ResourceLocation(TerminaMod.MOD_ID, "overworld"), RegionType.OVERWORLD, 1);
     }
 
     @Override
     public void addBiomes(Registry<Biome> registry, Consumer<Pair<Climate.ParameterPoint, ResourceKey<Biome>>> mapper) {
-        Climate.Parameter temp = Climate.Parameter.span(-0.45f, 0.2f);
-        Climate.Parameter humidity = Climate.Parameter.span(-0.45f, 0.2f);
-        Climate.Parameter cont = Climate.Parameter.span(0.4f, 1.0f);
-        Climate.Parameter erosion = Climate.Parameter.span(-1.0f, -0.7f);
+        Climate.Parameter temp     = Climate.Parameter.span(-0.2f, 0.1f);
+        Climate.Parameter humidity = Climate.Parameter.span(-0.3f, 0.0f);
+        Climate.Parameter cont     = Climate.Parameter.span(0.3f, 1.0f);
+        Climate.Parameter erosion  = Climate.Parameter.span(-1.0f, -0.5f);
 
         mapper.accept(Pair.of(Climate.parameters(
                         temp, humidity, cont, erosion,
                         Climate.Parameter.point(0.0f),
-                        Climate.Parameter.span(0.05f, 1.0f), 0),
-                CHERRY_PEAKS));
-
-        mapper.accept(Pair.of(Climate.parameters(
-                        temp, humidity, cont, erosion,
-                        Climate.Parameter.point(0.0f),
-                        Climate.Parameter.span(-1.0f, -0.05f), 0),
+                        Climate.Parameter.span(0.2f, 1.0f), 0),
                 CHERRY_PEAKS));
 
         mapper.accept(Pair.of(Climate.parameters(
                         temp, humidity, cont, erosion,
                         Climate.Parameter.point(1.0f),
-                        Climate.Parameter.span(0.05f, 1.0f), 0),
-                CHERRY_PEAKS));
-
-        mapper.accept(Pair.of(Climate.parameters(
-                        temp, humidity, cont, erosion,
-                        Climate.Parameter.point(1.0f),
-                        Climate.Parameter.span(-1.0f, -0.05f), 0),
+                        Climate.Parameter.span(0.2f, 1.0f), 0),
                 CHERRY_PEAKS));
     }
 }
